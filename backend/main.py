@@ -21,7 +21,7 @@ app = FastAPI()
 # alag port (React, jo 3000 pe chalta hai) se is API (jo 8000 pe chalta hai) ko call kar sake
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
