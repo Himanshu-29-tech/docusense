@@ -3,6 +3,8 @@ import axios from 'axios';
 import './App.css';
 import DocumentHistory from './DocumentHistory';
 
+const API_URL = 'https://docusense-backend-ifnw.onrender.com';
+
 function App() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -29,7 +31,7 @@ function App() {
 
     try {
       const response = await axios.post(
-        'http://localhost:8000/api/process-document',
+        `${API_URL}/api/process-document`,
         formData,
         { headers: { 'Content-Type': 'multipart/form-data' } }
       );

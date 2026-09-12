@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const API_URL = 'https://docusense-backend-ifnw.onrender.com';
+
 function DocumentHistory() {
   const [documents, setDocuments] = useState([]);
 
   // useEffect — ye component load hote hi ek baar chalta hai
   useEffect(() => {
-    axios.get('http://localhost:8000/api/documents')
+    axios.get(`${API_URL}/api/documents`)
       .then(res => setDocuments(res.data))
       .catch(err => console.error(err));
   }, []);
