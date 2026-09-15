@@ -11,12 +11,15 @@ function App() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('upload');
+  const [saving, setSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   // Jab user file select kare
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
     setResult(null);
     setError(null);
+    setSaveSuccess(false);
   };
 
   // Jab user "Process" button dabaye
@@ -25,6 +28,7 @@ function App() {
 
     setLoading(true);
     setError(null);
+    setSaveSuccess(false);
 
     const formData = new FormData();
     formData.append('file', file);
@@ -41,6 +45,28 @@ function App() {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Jab user "Confirm & Save" dabaye
+  const handleSave = async () => {
+    setSaving(true);
+    setSaveSuccess(false);
+    try {
+      await axios.post(`${API_URL}/api/save-document`, {
+        filename: result.filename,
+        document_type: result.analysis.document_type,
+        raw_text: result.raw_text,
+        entities: result.entities,
+        summary: result.analysis.summary,
+        anomalies: result.analysis.anomalies,
+      });
+      setSaveSuccess(true);
+    } catch (err) {
+      setError('Save failed.');
+      console.error(err);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -101,6 +127,15 @@ function App() {
                   )}
                 </div>
               </div>
+
+              <button
+                onClick={handleSave}
+                style={{ marginTop: '16px' }}
+                disabled={saving}
+              >
+                {saving ? 'Saving...' : '✅ Confirm & Save'}
+              </button>
+              {saveSuccess && <p style={{ color: '#90ee90' }}>Saved successfully!</p>}
             </div>
           )}
         </div>
